@@ -8,10 +8,12 @@ class Mplayer < Formula
   head 'svn://svn.mplayerhq.hu/mplayer/trunk', :using => StrictSubversionDownloadStrategy
 
   option 'with-x', 'Build with X11 support'
+  option 'with-aa', 'Build with aalib support'
 
   depends_on 'yasm' => :build
   depends_on 'xz' => :build
   depends_on :x11 if build.include? 'with-x'
+  depends_on 'aalib' if build.include? 'with-aa'
 
   fails_with :clang do
     build 211
@@ -49,6 +51,7 @@ class Mplayer < Formula
     ]
 
     args << "--disable-x11" unless build.include? 'with-x'
+    args << "--enable-aa" if build.include? 'with-aa'
 
     system "./configure", *args
     system "make"
